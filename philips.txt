@@ -1,0 +1,48 @@
+1.change in image , image should buld, scrpts are exe as per admin 
+
+Container A --> where script should run 
+
+FROM centos
+RUN yum update && yum install wget curl awscli
+RUN yum install nginx
+CMD [ systemclt start nginx.service]
+
+docker build -t scripts:V1 .
+
+Attaching an S3 Bucket as NFS Volume in Docker
+
+We can attach an S3 bucket as a mounted Volume in docker.
+
+We need to use a Plugin to achieve this.
+
+The plugin is  -->rexray
+
+docker plugin install rexray/s3fs:latest S3FS_REGION=us-east-2 S3FS_OPTIONS="allow_other,iam_role=auto,umask=000" --grant-all-permissions
+
+docker run -ti --volume-driver=rexray/s3fs -v ${aws-bucket-name}:/usr/share/nginx/html scripts:v1
+
+
+
+
+
+
+
+Container B --> Running jobs on A container from B container 
+
+
+FROM centos as b
+RUN yum update && yum install wget curl awscli
+
+curl http;//endurl/webscript`
+
+RUN scp ./Script/ user@$(nameofcontainer):/usr/share/nginx/html
+CMD [ "curl", endurl]
+=================================================================
+docker build -t source:v1 .
+
+docker run -itd source:V1 curl endurl/script.sh
+
+
+
+
+
